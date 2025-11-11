@@ -1,0 +1,44 @@
+{
+  "name": "serverdesk",
+  "version": "1.0.0",
+  "description": "ServerDesk — Local Apache & MySQL Control Panel ",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "build": "electron-builder"
+  },
+  "keywords": [
+    "electron",
+    "apache",
+    "mysql",
+    "xampp",
+    "local-server",
+    "control-panel",
+    "serverdesk"
+  ],
+  "author": "Mhd Raihan",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.mhdraihan.serverdesk",
+    "productName": "ServerDesk",
+    "files": [
+      "**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "icon512.png"
+    },
+    "directories": {
+      "output": "dist"
+    }
+  }
+}

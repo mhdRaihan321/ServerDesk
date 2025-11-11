@@ -1,0 +1,50 @@
+# ===========================
+# MariaDB Server Configuration
+# ===========================
+
+[mysqld]
+# Basic Settings
+port=3306
+basedir=I:/MYXAMPP/MyServer/bin/mysql
+datadir=I:/MYXAMPP/MyServer/bin/mysql/data
+socket=I:/MYXAMPP/MyServer/bin/mysql/mysql.sock
+pid_file=I:/MYXAMPP/MyServer/bin/mysql/mysql.pid
+
+# Character Set
+character-set-server=utf8mb4
+collation-server=utf8mb4_general_ci
+
+# SQL Mode
+sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
+
+# Logging
+log_error=I:/MYXAMPP/MyServer/bin/mysql/data/mysql_error.log
+
+# InnoDB Settings
+innodb_buffer_pool_size=128M
+innodb_log_file_size=48M
+innodb_flush_method=normal
+
+# Disable performance_schema if not needed
+performance_schema=ON
+
+# Skip networking conflicts
+skip-name-resolve
+
+# Security
+# (You can remove this after initialization if not needed)
+# skip-grant-tables
+
+# Increase connection limit if you expect more clients
+max_connections=150
+
+# ===========================
+# Client Settings
+# ===========================
+
+[mysql]
+default-character-set=utf8mb4
+prompt=\u@\h [\d]> 
+
+[mariadb]
+plugin_dir=I:/MYXAMPP/MyServer/bin/mysql/lib/plugin

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ServerDesk - Apache is Running</title>
+
+  <!-- ✅ Load Tailwind Immediately -->
+  <script>
+    document.write('<script src="https://cdn.tailwindcss.com"><\/script>');
+  </script>
+
+  <!-- ✅ Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- ✅ Favicon -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="favicon.ico" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { inter: ["Inter", "sans-serif"] },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    body {
+      background: radial-gradient(circle at top right, #0f172a, #1e293b);
+      font-family: 'Inter', sans-serif;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    .glass {
+      background: rgba(30, 41, 59, 0.65);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+    .gradient-text {
+      background: linear-gradient(to right, #f97316, #fbbf24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .btn {
+      background: linear-gradient(to right, #f97316, #fbbf24);
+      border: none;
+      color: #0f172a;
+      font-weight: bold;
+      padding: 12px 28px;
+      border-radius: 12px;
+      transition: all 0.2s ease-in-out;
+    }
+    .btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 6px 18px rgba(249, 115, 22, 0.4);
+    }
+    .divider {
+      height: 1px;
+      background: rgba(148, 163, 184, 0.2);
+      margin: 1.5rem 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="glass rounded-2xl p-10 text-center max-w-lg">
+    <div class="flex justify-center mb-4">
+      <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-xl overflow-hidden">
+        <img src="icon512.png" alt="ServerDesk Icon" class="w-14 h-14 rounded-lg" />
+      </div>
+    </div>
+
+    <h1 class="text-3xl font-bold mb-2 gradient-text">
+      Apache Server is Running 🚀
+    </h1>
+    <p class="text-gray-300 mb-4">
+      Welcome to <b>ServerDesk</b> — your local Apache setup is live and operational.
+    </p>
+
+    <div class="divider"></div>
+
+    <h2 class="text-lg font-semibold mb-2">Server Features</h2>
+    <ul class="text-gray-300 text-left mx-auto w-fit list-disc list-inside mb-4">
+      <li>🔥 Fast local web server</li>
+      <li>⚙️ PHP and MySQL ready</li>
+      <li>🔒 Secure local testing</li>
+      <li>🧠 Easy Node.js integration</li>
+    </ul>
+
+    <div class="space-y-6">
+      <a href="http://localhost:7070/phpmyadmin" target="_blank" class="btn inline-flex items-center space-x-2">
+        <i data-lucide="database" class="w-5 h-5"></i>
+        <span>Open phpMyAdmin</span>
+      </a>
+
+      <a href="https://github.com/mhdRaihan321" target="_blank" class="btn inline-flex items-center space-x-2">
+        <i data-lucide="github"></i>
+        <span>My GitHub</span>
+      </a>
+    </div>
+
+    <p class="text-sm text-gray-400 mt-4">
+      Made with ❤️ by <b>Mhd Raihan</b>
+    </p>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => lucide.createIcons());
+  </script>
+</body>
+</html>

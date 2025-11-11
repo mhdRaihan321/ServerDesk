@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+
+<head>
+  <meta charset="UTF-8">
+  <title>ServerDesk</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    }
+
+    /* Glassmorphism */
+    .glass {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    /* Hover & Card Effects */
+    .card-hover {
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .card-hover.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-hover:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    /* Ripple Button */
+    .btn-ripple {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .btn-ripple::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-ripple:active::after {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-ripple:active {
+      transform: scale(0.95);
+    }
+
+    /* Pulse */
+    .status-dot {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    /* Gradient Text */
+    .gradient-text {
+      background: linear-gradient(to right, #f97316, #fbbf24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Toast */
+    .toast {
+      @apply fixed bottom-6 right-6 px-5 py-3 rounded-xl shadow-2xl z-50 flex items-center space-x-3 backdrop-blur-xl border;
+      animation: slideIn 0.4s ease-out forwards, fadeOut 0.4s ease-out 4.6s forwards;
+      min-width: 320px;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeOut {
+      to {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+    }
+
+    /* Log Line Fade */
+    .log-line {
+      opacity: 0;
+      animation: fadeInUp 0.3s ease-out forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Input Focus */
+    input:focus {
+      @apply ring-2 ring-offset-2 ring-offset-transparent;
+    }
+
+    #apachePort:focus {
+      @apply ring-orange-500;
+    }
+
+    #mysqlPort:focus {
+      @apply ring-blue-500;
+    }
+  </style>
+</head>
+
+<body class="h-full text-gray-100 overflow-hidden flex flex-col">
+
+  <div class="flex flex-1 overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-72 glass border-r border-slate-700/50 flex flex-col">
+<div class="p-6 border-b border-slate-700/50">
+  <div class="flex items-center space-x-3">
+    <div
+      class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-xl overflow-hidden">
+      <img src="icon512.png" alt="ServerDesk Icon" class="w-14 h-14 rounded-lg" />
+    </div>
+    <div>
+      <h1 class="text-2xl font-bold gradient-text">ServerDesk</h1>
+      <p class="text-xs text-slate-400">Local Dev Stack</p>
+    </div>
+  </div>
+</div>
+
+
+      <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <a href="#"
+          class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl bg-gradient-to-r from-orange-500/20 to-yellow-500/20 text-white border border-orange-500/30 shadow-lg transition-all duration-300"
+          data-page="dashboard">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+          <span class="font-semibold">Dashboard</span>
+        </a>
+        <a href="#"
+          class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all duration-300"
+          data-page="settings">
+          <i data-lucide="settings" class="w-5 h-5"></i>
+          <span class="font-semibold">Settings</span>
+        </a>
+      </nav>
+
+      <div class="p-4 border-t border-slate-700/50">
+        <div class="glass rounded-xl p-4 text-center">
+          <p class="text-xs text-slate-400">System Status</p>
+          <p id="systemStatus" class="text-sm font-bold text-emerald-400">Loading...</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-hidden">
+      <header class="glass border-b border-slate-700/50 px-8 py-5 flex items-center justify-between">
+        <div>
+          <h2 id="pageTitle" class="text-2xl font-bold text-white">Services Dashboard</h2>
+          <p class="text-sm text-slate-400">Monitor and control your local server stack</p>
+        </div>
+        <button id="refreshBtn"
+          class="btn-ripple p-3 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700/50 transition-all duration-300">
+          <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+        </button>
+      </header>
+
+      <section id="pageContent" class="flex-1 overflow-y-auto p-8 space-y-8">
+        <!-- Dashboard -->
+        <div id="dashboard">
+          <!-- Stats -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="glass rounded-2xl p-6 card-hover">
+              <div class="flex items-center justify-between mb-3">
+                <i data-lucide="activity" class="w-8 h-8 text-blue-400"></i>
+                <span class="text-xs text-slate-400">Uptime</span>
+              </div>
+              <p id="totalUptime" class="text-3xl font-bold text-white">00:00:00</p>
+            </div>
+            <div class="glass rounded-2xl p-6 card-hover">
+              <div class="flex items-center justify-between mb-3">
+                <i data-lucide="cpu" class="w-8 h-8 text-emerald-400"></i>
+                <span class="text-xs text-slate-400">Services</span>
+              </div>
+              <p id="activeServices" class="text-3xl font-bold text-white">0 / 2</p>
+            </div>
+            <div class="glass rounded-2xl p-6 card-hover">
+              <div class="flex items-center justify-between mb-3">
+                <i data-lucide="memory-stick" class="w-8 h-8 text-purple-400"></i>
+                <span class="text-xs text-slate-400">Memory</span>
+              </div>
+              <p id="totalMemory" class="text-3xl font-bold text-white">0 MB</p>
+            </div>
+          </div>
+
+          <!-- Services -->
+          <!-- Services -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+
+            <!-- Apache -->
+            <div class="glass rounded-2xl p-6 card-hover border border-slate-700/50">
+              <div class="flex items-center justify-between mb-5">
+                <div class="flex items-center space-x-4">
+                  <div
+                    class="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center">
+                    <i data-lucide="globe" class="w-7 h-7 text-white"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-xl font-bold text-white">Apache Server</h3>
+                    <p class="text-sm text-slate-400">HTTP Web Server</p>
+                  </div>
+                </div>
+                <span id="apacheBadge"
+                  class="px-4 py-2 rounded-full text-xs font-bold bg-slate-800 text-slate-400 border border-slate-700">
+                  <span class="inline-block w-2 h-2 rounded-full mr-2 bg-slate-500"></span>
+                  Stopped
+                </span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4 mb-6 text-sm">
+                <div class="bg-slate-800/50 rounded-xl p-3">
+                  <p class="text-slate-400">Port</p>
+                  <p id="apachePortDisplay" class="font-mono text-white">—</p>
+                </div>
+                <div class="bg-slate-800/50 rounded-xl p-3">
+                  <p class="text-slate-400">PID</p>
+                  <p id="apachePID" class="font-mono text-white">—</p>
+                </div>
+                <div class="bg-slate-800/50 rounded-xl p-3">
+                  <p class="text-slate-400">Memory</p>
+                  <p id="apacheMem" class="font-mono text-white">—</p>
+                </div>
+                <div class="bg-slate-800/50 rounded-xl p-3">
+                  <p class="text-slate-400">Uptime</p>
+                  <p id="apacheUptime" class="font-mono text-white">—</p>
+                </div>
+              </div>
+
+              <div class="flex space-x-3">
+                <button id="apacheToggle"
+                  class="btn-ripple flex-1 py-3 rounded-xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white shadow-lg">
+                  Start Apache
+                </button>
+                <button id="openLocalhost"
+                  class="btn-ripple px-5 py-3 bg-blue-600 hover:bg-blue-700 rounded-xl font-bold flex items-center space-x-2">
+                  <i data-lucide="external-link" class="w-5 h-5"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- MySQL -->
+            <div class="glass rounded-2xl p-6 card-hover border border-slate-700/50">
+              <div class="flex items-center justify-between mb-5">
+                <div class="flex items-center space-x-4">
+                  <div
+                    class="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center">
+                    <i data-lucide="database" class="w-7 h-7 text-white"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-xl font-bold text-white">MySQL Server</h3>
+                    <p class="text-sm text-slate-400">Database Server</p>
+                  </div>
+                </div>
+                <span id="mysqlBadge"
+                  class="px-4 py-2 rounded-full text-xs font-bold bg-slate-800 text-slate-400 border border-slate-700">
+                  <span class="inline-block w-2 h-2 rounded-full mr-2 bg-slate-500"></span>
+                  Stopped
+                </span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4 mb-6 text-sm">
+                <div class="bg-slate-800/50 rounded-xl p-3">
+                  <p class="text-slate-400">Port</p>
+                  <p id="mysqlPortDisplay" class="font-mono text-white">—</p>
+                </div>
+                <div class="bg-slate-800/50 rounded-xl p-3">
+                  <p class="text-slate-400">PID</p>
+                  <p id="mysqlPID" class="font-mono text-white">—</p>
+                </div>
+                <div class="bg-slate-800/50 rounded-xl p-3">
+                  <p class="text-slate-400">Memory</p>
+                  <p id="mysqlMem" class="font-mono text-white">—</p>
+                </div>
+                <div class="bg-slate-800/50 rounded-xl p-3">
+                  <p class="text-slate-400">Uptime</p>
+                  <p id="mysqlUptime" class="font-mono text-white">—</p>
+                </div>
+              </div>
+
+              <div class="flex space-x-3">
+                <button id="mysqlToggle"
+                  class="btn-ripple flex-1 py-3 rounded-xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white shadow-lg">
+                  Start MySQL
+                </button>
+                <button id="openPHPMyAdmin"
+                  class="btn-ripple px-5 py-3 bg-purple-600 hover:bg-purple-700 rounded-xl font-bold flex items-center space-x-2">
+                  <i data-lucide="database" class="w-5 h-5"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Logs -->
+          <div class="glass rounded-2xl p-6 border border-slate-700/50">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-bold text-white flex items-center">
+                <i data-lucide="file-text" class="w-5 h-5 mr-2 text-blue-400"></i>
+                System Logs
+              </h3>
+              <div class="flex items-center space-x-2">
+                <input id="logSearch" type="text" placeholder="Search logs..."
+                  class="bg-slate-800/50 text-sm px-3 py-2 rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none w-64 transition-all duration-300">
+                <button id="clearLogs"
+                  class="btn-ripple px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm"><i
+                    data-lucide="trash-2" class="w-4 h-4"></i></button>
+                <button id="copyLogs" class="btn-ripple px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm"><i
+                    data-lucide="copy" class="w-4 h-4"></i></button>
+                <button id="exportLogs" class="btn-ripple px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm"><i
+                    data-lucide="download" class="w-4 h-4"></i></button>
+              </div>
+            </div>
+            <pre id="logBox"
+              class="h-64 overflow-y-auto p-4 bg-black/30 rounded-lg font-mono text-xs text-slate-300"></pre>
+          </div>
+        </div>
+
+        <!-- Settings -->
+        <div id="settings" class="hidden space-y-6">
+          <div class="glass rounded-2xl p-6 card-hover">
+            <h3 class="text-xl font-bold text-white mb-6">Auto-Start Configuration</h3>
+            <label
+              class="flex items-center justify-between p-4 bg-slate-800/50 rounded-xl cursor-pointer hover:bg-slate-700/50 transition-all duration-300">
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center">
+                  <i data-lucide="globe" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                  <p class="font-semibold text-white">Apache Server</p>
+                  <p class="text-xs text-slate-400">Start on app launch</p>
+                </div>
+              </div>
+              <input id="autoApache" type="checkbox" class="w-6 h-6 text-emerald-500 rounded-lg focus:ring-emerald-500">
+            </label>
+            <label
+              class="flex items-center justify-between p-4 bg-slate-800/50 rounded-xl cursor-pointer mt-3 hover:bg-slate-700/50 transition-all duration-300">
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center">
+                  <i data-lucide="database" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                  <p class="font-semibold text-white">MySQL Server</p>
+                  <p class="text-xs text-slate-400">Start on app launch</p>
+                </div>
+              </div>
+              <input id="autoMySQL" type="checkbox" class="w-6 h-6 text-emerald-500 rounded-lg focus:ring-emerald-500">
+            </label>
+          </div>
+
+          <div class="glass rounded-2xl p-6 card-hover">
+            <h3 class="text-xl font-bold text-white mb-6">Port Configuration</h3>
+            <div class="grid grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-slate-400 mb-2">Apache HTTP Port</label>
+                <input id="apachePort" type="number" min="1" max="65535"
+                  class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-orange-500 focus:ring-orange-500/20 outline-none transition-all duration-300">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-400 mb-2">MySQL Port</label>
+                <input id="mysqlPort" type="number" min="1" max="65535"
+                  class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-blue-500 focus:ring-blue-500/20 outline-none transition-all duration-300">
+              </div>
+            </div>
+          </div>
+
+          <button id="saveSettingsBtn"
+            class="btn-ripple w-full py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 rounded-xl font-bold text-lg shadow-xl">
+            Save Configuration
+          </button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="renderer.js"></script>
+  <script>
+    lucide.createIcons();
+    document.documentElement.classList.add('dark');
+
+    // Animate cards on load
+    document.querySelectorAll('.card-hover').forEach((card, i) => {
+      setTimeout(() => card.classList.add('visible'), i * 150);
+    });
+  </script>
+</body>
+
+</html>
