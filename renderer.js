@@ -245,7 +245,7 @@ function showToast(message, type = "info") {
 }
 
 // --- Init ---
-log("ServerDesk v4.1 Ready", "success");
+log("ServerDesk v1.0 Ready", "success");
 loadSettings();
 ipcRenderer.send("check-status");
 setInterval(() => ipcRenderer.send("check-status"), 15000);
