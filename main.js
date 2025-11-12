@@ -4,6 +4,7 @@ const path = require("path");
 const { spawn, exec } = require("child_process");
 const fs = require("fs");
 const fetch = require("node-fetch");
+const AutoLaunch = require('auto-launch');
 
 let mainWindow, tray;
 let apacheProcess = null, mysqlProcess = null;
@@ -16,7 +17,8 @@ let config = {
   autoStartApache: false,
   autoStartMySQL: false,
   apachePort: 80,
-  mysqlPort: 3306
+  mysqlPort: 3306,
+  autoStartApp: true,
 };
 
 if (fs.existsSync(CONFIG_PATH)) {
@@ -30,13 +32,14 @@ if (fs.existsSync(CONFIG_PATH)) {
 const APACHE_PATH = "I:/MYXAMPP/MyServer/bin/apache/bin/httpd.exe";
 const MYSQL_PATH = "I:/MYXAMPP/MyServer/bin/mysql/bin/mysqld.exe";
 
+
 // === Window ===
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
     title: "ServerDesk",
-    icon: path.join(__dirname, "assets", "icon512.png"),
+    icon: path.join(__dirname, "assets", "favw.png"),
     backgroundColor: "#0f172a",
     webPreferences: { 
       nodeIntegration: true, 
@@ -69,7 +72,7 @@ function createWindow() {
 
 // === Tray ===
 function createTray() {
-  const iconPath = path.join(__dirname, "assets", "icon512.ico");
+  const iconPath = path.join(__dirname, "assets", "favw.png");
   const trayIcon = nativeImage.createFromPath(iconPath);
   tray = new Tray(trayIcon);
   tray.setToolTip("ServerDesk - Local Server Control Panel");
@@ -89,7 +92,10 @@ function updateTray() {
     : "🔴 Offline";
 
   const menu = Menu.buildFromTemplate([
-    { label: `ServerDesk • ${label}`, enabled: false },
+    { icon : nativeImage.createFromPath(path.join(__dirname, "assets", "favicon.ico",)), label: `ServerDesk • ${label}`, enabled: false },
+
+    { type: "separator" },
+    { label: "Show App", click: () => mainWindow.show() },
     { type: "separator" },
     {
       label: apacheRunning ? "Stop Apache" : "Start Apache",
@@ -98,9 +104,8 @@ function updateTray() {
     {
       label: mysqlRunning ? "Stop MySQL" : "Start MySQL",
       click: mysqlRunning ? stopMySQL : startMySQL,
-    },
+    },    
     { type: "separator" },
-    { label: "Show App", click: () => mainWindow.show() },
     {
       label: "Quit",
       click: () => {
@@ -116,6 +121,19 @@ function updateTray() {
   tray.on("click", () => mainWindow.show());
 }
 
+// === Auto-Launcher ===
+const serverDeskAutoLauncher = new AutoLaunch({
+  name: 'ServerDesk',
+  path: process.execPath,
+});
+
+serverDeskAutoLauncher.isEnabled()
+  .then(enabled => {
+    if (!enabled) serverDeskAutoLauncher.enable();
+  })
+  .catch(err => console.error('AutoLaunch Error:', err));
+
+  
 // === Services ===
 function startApache() {
   if (apacheProcess || !fs.existsSync(APACHE_PATH))
@@ -215,17 +233,34 @@ ipcMain.on("stop-apache", stopApache);
 ipcMain.on("start-mysql", startMySQL);
 ipcMain.on("stop-mysql", stopMySQL);
 
-ipcMain.on("save-settings", (_, cfg) => {
-  config = { ...config, ...cfg };
-  fs.writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2));
-  sendLog("Settings saved successfully.", "success");
-  if (apacheProcess) {
-    stopApache();
-    setTimeout(startApache, 800);
-  }
-  if (mysqlProcess) {
-    stopMySQL();
-    setTimeout(startMySQL, 800);
+ipcMain.on("save-settings", (_, newCfg) => {
+  try {
+    // Merge and save config
+    config = { ...config, ...newCfg };
+    fs.writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2));
+
+    // 🔄 Restart Apache/MySQL if already running
+    if (apacheProcess) {
+      stopApache();
+      setTimeout(startApache, 800);
+    }
+    if (mysqlProcess) {
+      stopMySQL();
+      setTimeout(startMySQL, 800);
+    }
+
+    // ⚙️ Update AutoLaunch dynamically
+    if (config.autoStartApp) {
+      serverDeskAutoLauncher.enable();
+    } else {
+      serverDeskAutoLauncher.disable();
+    }
+
+    // 🧾 Log success to renderer
+    sendLog("Settings saved successfully.", "success");
+  } catch (err) {
+    console.error("⚠️ Error saving settings:", err);
+    sendLog("Failed to save settings.", "error");
   }
 });
 

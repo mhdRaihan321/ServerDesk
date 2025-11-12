@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "ServerDesk — Local Apache & MySQL Control Panel ",
   "main": "main.js",
+  
   "scripts": {
     "start": "electron .",
     "dev": "electron .",
@@ -21,6 +22,8 @@
   "license": "MIT",
   "type": "commonjs",
   "dependencies": {
+    "auto-launch": "^5.0.6",
+    "electron-auto-launch": "^5.0.7",
     "node-fetch": "^2.7.0"
   },
   "devDependencies": {
@@ -28,6 +31,7 @@
     "electron-builder": "^24.13.3"
   },
   "build": {
+    "publisherName": "Raihan’s Innovations Studio",
     "appId": "com.mhdraihan.serverdesk",
     "productName": "ServerDesk",
     "files": [
@@ -35,7 +39,7 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": "icon512.png"
+      "icon": "favw.png"
     },
     "directories": {
       "output": "dist"
@@ -43,11 +47,10 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-        "perMachine": false,
-        "createDesktopShortcut": true,
-        "createStartMenuShortcut": true,
-        "shortcutName": "ServerDesk"
-      
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "ServerDesk"
     }
   }
 }

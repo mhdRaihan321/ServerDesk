@@ -166,18 +166,17 @@
   <div class="flex flex-1 overflow-hidden">
     <!-- Sidebar -->
     <aside class="w-72 glass border-r border-slate-700/50 flex flex-col">
-<div class="p-6 border-b border-slate-700/50">
-  <div class="flex items-center space-x-3">
-    <div
-      class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-xl overflow-hidden">
-      <img src="icon512.png" alt="ServerDesk Icon" class="w-14 h-14 rounded-lg" />
-    </div>
-    <div>
-      <h1 class="text-2xl font-bold gradient-text">ServerDesk</h1>
-      <p class="text-xs text-slate-400">Local Dev Stack</p>
-    </div>
-  </div>
-</div>
+      <div class="p-6 border-b border-slate-700/50">
+        <div class="flex items-center space-x-3">
+          <div class="w-14 h-14 bg-black rounded-2xl flex items-center justify-center shadow-xl overflow-hidden">
+            <img src="favw.png" alt="ServerDesk Icon" class="w-12 h-12 rounded-lg" />
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold gradient-text">ServerDesk</h1>
+            <p class="text-xs text-slate-400">Local Dev Stack</p>
+          </div>
+        </div>
+      </div>
 
 
       <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
@@ -201,14 +200,11 @@
           <p id="systemStatus" class="text-sm font-bold text-emerald-400">Loading...</p>
         </div>
         <p class="text-sm text-gray-400 mt-4 text-center">
-  Made with ❤️ by <b>Mhd Raihan</b>
-</p><a href="https://github.com/mhdRaihan321" target="_blank" class="flex justify-center mt-2">
-  <img 
-    src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" 
-    alt="GitHub" 
-    class="w-8 h-8 hover:scale-110 transition-transform duration-200 rounded-2xl"
-  >
-</a>
+          Made with ❤️ by <b>Mhd Raihan</b>
+        </p><a href="https://github.com/mhdRaihan321" target="_blank" class="flex justify-center mt-2">
+          <img src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" alt="GitHub"
+            class="w-8 h-8 hover:scale-110 transition-transform duration-200 rounded-2xl">
+        </a>
       </div>
     </aside>
 
@@ -390,6 +386,21 @@
             <h3 class="text-xl font-bold text-white mb-6">Auto-Start Configuration</h3>
             <label
               class="flex items-center justify-between p-4 bg-slate-800/50 rounded-xl cursor-pointer hover:bg-slate-700/50 transition-all duration-300">
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center">
+                  <i data-lucide="rocket" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                  <p class="font-semibold text-white">Auto Start on Boot</p>
+                  <p class="text-xs text-slate-400">Start ServerDesk on system startup</p>
+                </div>
+              </div>
+              <input id="autoApp" type="checkbox" class="w-6 h-6 text-emerald-500 rounded-lg focus:ring-emerald-500">
+            </label>
+
+            <label
+              class="flex items-center justify-between p-4 bg-slate-800/50 rounded-xl cursor-pointer mt-3 hover:bg-slate-700/50 transition-all duration-300">
               <div class="flex items-center space-x-3">
                 <div
                   class="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center">

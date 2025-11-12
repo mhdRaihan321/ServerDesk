@@ -177,6 +177,7 @@ document.getElementById("logSearch").addEventListener("input", e => {
 // --- Settings ---
 function loadSettings() {
   const cfg = JSON.parse(localStorage.getItem("serverdesk_cfg") || "{}");
+  document.getElementById("autoApp").checked = cfg.autoStartApp ?? true;
   document.getElementById("autoApache").checked = cfg.autoStartApache ?? false;
   document.getElementById("autoMySQL").checked = cfg.autoStartMySQL ?? false;
   document.getElementById("apachePort").value = cfg.apachePort ?? 80;
@@ -185,6 +186,7 @@ function loadSettings() {
 
 els.saveBtn.onclick = () => {
   const cfg = {
+    autoStartApp: document.getElementById("autoApp").checked,
     autoStartApache: document.getElementById("autoApache").checked,
     autoStartMySQL: document.getElementById("autoMySQL").checked,
     apachePort: +document.getElementById("apachePort").value,
