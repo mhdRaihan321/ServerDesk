@@ -35,10 +35,10 @@ Fast, minimal, and built for developers who want simplicity and control — all 
 
 <div align="center">
 
-![ServerDesk Screenshot](Main_page)
+![ServerDesk Screenshot](Main_page.png)
 
 
-![ServerDesk Screenshot](Settings_Page)
+![ServerDesk Screenshot](Settings_Page.png)
 
 
 
