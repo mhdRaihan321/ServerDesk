@@ -35,9 +35,12 @@ Fast, minimal, and built for developers who want simplicity and control — all 
 
 <div align="center">
 
-![ServerDesk Screenshot](path/to/your/screenshot.png)
+![ServerDesk Screenshot](Main_page)
 
-*Replace this with your actual app screenshot*
+
+![ServerDesk Screenshot](Settings_Page)
+
+
 
 </div>
 
