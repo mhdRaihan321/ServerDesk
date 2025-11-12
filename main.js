@@ -41,9 +41,9 @@ function createWindow() {
     title: "ServerDesk",
     icon: path.join(__dirname, "assets", "favw.png"),
     backgroundColor: "#0f172a",
-    webPreferences: { 
-      nodeIntegration: true, 
-      contextIsolation: false 
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
     },
   });
 
@@ -88,11 +88,21 @@ function updateTray() {
   const label = allRunning
     ? "🟢 All Running"
     : apacheRunning || mysqlRunning
-    ? "🟠 Partial"
-    : "🔴 Offline";
+      ? "🟠 Partial"
+      : "🔴 Offline";
 
   const menu = Menu.buildFromTemplate([
-    { icon : nativeImage.createFromPath(path.join(__dirname, "assets", "favicon.ico",)), label: `ServerDesk • ${label}`, enabled: false },
+    {
+      icon: nativeImage
+        .createFromPath(path.join(__dirname, "assets", "favw.png"))
+        .resize({
+          width: 16,
+          height: 16,
+          quality: "best",
+        }),
+      label: `ServerDesk • ${label}`,
+      enabled: false,
+    },
 
     { type: "separator" },
     { label: "Show App", click: () => mainWindow.show() },
@@ -104,7 +114,7 @@ function updateTray() {
     {
       label: mysqlRunning ? "Stop MySQL" : "Start MySQL",
       click: mysqlRunning ? stopMySQL : startMySQL,
-    },    
+    },
     { type: "separator" },
     {
       label: "Quit",
@@ -133,7 +143,7 @@ serverDeskAutoLauncher.isEnabled()
   })
   .catch(err => console.error('AutoLaunch Error:', err));
 
-  
+
 // === Services ===
 function startApache() {
   if (apacheProcess || !fs.existsSync(APACHE_PATH))
@@ -193,7 +203,7 @@ async function checkHealth() {
   try {
     const res = await fetch(`http://127.0.0.1:${config.apachePort}`, { timeout: 2000 });
     stats.apache.alive = res.ok;
-  } catch {}
+  } catch { }
 
   try {
     const net = require("net");
@@ -204,7 +214,7 @@ async function checkHealth() {
       s.on("timeout", () => reject());
     });
     stats.mysql.alive = true;
-  } catch {}
+  } catch { }
 
   exec("tasklist /FO CSV", (e, out) => {
     const lines = out.split("\n");
