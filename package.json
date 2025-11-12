@@ -1,9 +1,8 @@
 {
   "name": "serverdesk",
   "version": "1.0.0",
-  "description": "ServerDesk — Local Apache & MySQL Control Panel ",
+  "description": "ServerDesk — Local Apache & MySQL Control Panel",
   "main": "main.js",
-  
   "scripts": {
     "start": "electron .",
     "dev": "electron .",
@@ -31,7 +30,6 @@
     "electron-builder": "^24.13.3"
   },
   "build": {
-    "publisherName": "Raihan’s Innovations Studio",
     "appId": "com.mhdraihan.serverdesk",
     "productName": "ServerDesk",
     "files": [
@@ -39,7 +37,8 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": "favw.png"
+      "icon": "favw.png",
+      "publisherName": "Raihan’s Innovations Studio"
     },
     "directories": {
       "output": "dist"
